@@ -8,8 +8,8 @@ describe('AbletonLink', () => {
   });
 
   afterEach(() => {
-    if (link && link.isEnabled()) {
-      link.enable(false);
+    if (link && typeof link.close === 'function') {
+      link.close();
     }
   });
 

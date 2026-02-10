@@ -80,6 +80,11 @@ export declare class AbletonLink {
   getTimeForBeat(beat: number, quantum: number): number;
 
   /**
+   * Close the Link instance and release resources
+   */
+  close(): void;
+
+  /**
    * Enable or disable start/stop synchronization
    * @param enabled Whether to enable start/stop sync
    */

@@ -2,10 +2,14 @@
   "targets": [
     {
       "target_name": "abletonlink",
-      "sources": [ "src/abletonlink.cc" ],
+      "sources": [
+        "src/abletonlink.cc",
+        "link/extensions/abl_link/src/abl_link.cpp"
+      ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "link/include",
+        "link/extensions/abl_link/include",
         "link/modules/asio-standalone/asio/include"
       ],
       "dependencies": ["<!(node -p \"require('node-addon-api').gyp\")"],
