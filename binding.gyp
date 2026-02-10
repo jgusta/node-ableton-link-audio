@@ -2,16 +2,21 @@
   "targets": [
     {
       "target_name": "abletonlink",
-      "sources": [ "src/abletonlink.cc" ],
+      "sources": [
+        "src/wrapper/abletonlink.cc",
+        "src/wrapper/abletonlink_audio.cc",
+        "link/extensions/abl_link/src/abl_link.cpp"
+      ],
       "include_dirs": [
         "<!@(node -p \"require('node-addon-api').include\")",
         "link/include",
+        "link/extensions/abl_link/include",
         "link/modules/asio-standalone/asio/include"
       ],
       "dependencies": ["<!(node -p \"require('node-addon-api').gyp\")"],
       "cflags!": [ "-fno-exceptions" ],
       "cflags_cc!": [ "-fno-exceptions" ],
-      "cflags_cc": [ "-std=c++14" ],
+      "cflags_cc": [ "-std=c++17" ],
       "defines": [ 
         "NAPI_DISABLE_CPP_EXCEPTIONS",
         "LINK_PLATFORM_MACOSX=1",
@@ -22,7 +27,7 @@
           "xcode_settings": {
             "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
             "CLANG_CXX_LIBRARY": "libc++",
-            "CLANG_CXX_LANGUAGE_STANDARD": "c++14",
+            "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
             "MACOSX_DEPLOYMENT_TARGET": "10.11",
             "OTHER_CFLAGS": [
               "-stdlib=libc++",
@@ -35,7 +40,7 @@
           "msvs_settings": {
             "VCCLCompilerTool": {
               "ExceptionHandling": 1,
-              "AdditionalOptions": [ "/std:c++14" ]
+              "AdditionalOptions": [ "/std:c++17" ]
             }
           },
           "defines": [ 
@@ -44,7 +49,7 @@
           ]
         }],
         ["OS=='linux'", {
-          "cflags_cc": [ "-std=c++14", "-pthread" ],
+          "cflags_cc": [ "-std=c++17", "-pthread" ],
           "ldflags": [ "-pthread" ],
           "defines": [ "LINK_PLATFORM_LINUX=1" ]
         }]
