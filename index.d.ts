@@ -148,6 +148,7 @@ export declare class AbletonLink {
    * @returns Time in seconds when transport state will change
    */
   timeForIsPlaying(): number;
+  getClockTime(): number;
 }
 
 /**
@@ -236,6 +237,7 @@ export declare class AbletonLinkAudioSessionState {
   setIsPlaying(isPlaying: boolean, time: number): void;
   isPlaying(): boolean;
   timeForIsPlaying(): number;
+  getClockTime(): number;
   requestBeatAtStartPlayingTime(beat: number, quantum: number): void;
   setIsPlayingAndRequestBeatAtTime(
     isPlaying: boolean,

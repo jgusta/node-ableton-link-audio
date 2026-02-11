@@ -278,6 +278,7 @@ Napi::Object AbletonLinkAudioWrapper::Init(Napi::Env env, Napi::Object exports) 
         InstanceMethod("setIsPlayingAndRequestBeatAtTime",
                        &AbletonLinkAudioWrapper::SetIsPlayingAndRequestBeatAtTime),
         InstanceMethod("timeForIsPlaying", &AbletonLinkAudioWrapper::TimeForIsPlaying),
+        InstanceMethod("getClockTime", &AbletonLinkAudioWrapper::GetClockTime),
         InstanceMethod("isLinkAudioEnabled",
                        &AbletonLinkAudioWrapper::IsLinkAudioEnabled),
         InstanceMethod("enableLinkAudio", &AbletonLinkAudioWrapper::EnableLinkAudio),
@@ -496,6 +497,11 @@ Napi::Value AbletonLinkAudioWrapper::TimeForIsPlaying(const Napi::CallbackInfo& 
     auto state = link_->captureAppSessionState();
     const auto time = state.timeForIsPlaying();
     return Napi::Number::New(info.Env(), time.count() / 1000000.0);
+}
+
+Napi::Value AbletonLinkAudioWrapper::GetClockTime(const Napi::CallbackInfo& info) {
+    const auto micros = link_->clock().micros().count();
+    return Napi::Number::New(info.Env(), micros / 1000000.0);
 }
 
 Napi::Value AbletonLinkAudioWrapper::IsLinkAudioEnabled(

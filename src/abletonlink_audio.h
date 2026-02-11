@@ -67,6 +67,7 @@ private:
     void RequestBeatAtStartPlayingTime(const Napi::CallbackInfo& info);
     void SetIsPlayingAndRequestBeatAtTime(const Napi::CallbackInfo& info);
     Napi::Value TimeForIsPlaying(const Napi::CallbackInfo& info);
+    Napi::Value GetClockTime(const Napi::CallbackInfo& info);
 
     Napi::Value IsLinkAudioEnabled(const Napi::CallbackInfo& info);
     void EnableLinkAudio(const Napi::CallbackInfo& info);
