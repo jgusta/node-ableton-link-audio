@@ -5,4 +5,5 @@ module.exports = {
   coverageDirectory: 'coverage',
   verbose: true,
   forceExit: true,
+  maxWorkers: 1,
 };

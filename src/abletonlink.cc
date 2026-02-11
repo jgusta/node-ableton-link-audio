@@ -1,4 +1,5 @@
 #include "abletonlink.h"
+#include "abletonlink_audio.h"
 #include <chrono>
 
 namespace {
@@ -493,7 +494,9 @@ void AbletonLinkWrapper::NoopStartStopCallback(bool isPlaying, void* context) {
 
 // Module initialization
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
-    return AbletonLinkWrapper::Init(env, exports);
+    AbletonLinkWrapper::Init(env, exports);
+    InitAbletonLinkAudio(env, exports);
+    return exports;
 }
 
 NODE_API_MODULE(abletonlink, Init)

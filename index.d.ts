@@ -151,6 +151,149 @@ export declare class AbletonLink {
 }
 
 /**
+ * LinkAudio identifier (hex string, e.g. "0x0123...")
+ */
+export type LinkAudioId = string;
+
+/**
+ * LinkAudio channel description
+ */
+export interface LinkAudioChannel {
+  id: LinkAudioId;
+  name: string;
+  peerId: LinkAudioId;
+  peerName: string;
+}
+
+/**
+ * LinkAudio buffer info for received audio
+ */
+export declare class AbletonLinkAudioBufferInfo {
+  numChannels(): number;
+  numFrames(): number;
+  sampleRate(): number;
+  count(): number;
+  sessionBeatTime(): number;
+  tempo(): number;
+  sessionId(): LinkAudioId;
+  beginBeats(sessionState: AbletonLinkAudioSessionState, quantum: number): number | null;
+  endBeats(sessionState: AbletonLinkAudioSessionState, quantum: number): number | null;
+}
+
+/**
+ * LinkAudio sink buffer handle for writing samples
+ */
+export declare class AbletonLinkAudioSinkBufferHandle {
+  isValid(): boolean;
+  samples(): Buffer | null;
+  maxNumSamples(): number;
+  commit(
+    sessionState: AbletonLinkAudioSessionState,
+    beatsAtBufferBegin: number,
+    quantum: number,
+    numFrames: number,
+    numChannels: number,
+    sampleRate: number
+  ): boolean;
+}
+
+/**
+ * LinkAudio sink for sending audio
+ */
+export declare class AbletonLinkAudioSink {
+  constructor(link: AbletonLinkAudio, name: string, maxNumSamples: number);
+  name(): string;
+  setName(name: string): void;
+  requestMaxNumSamples(numSamples: number): void;
+  maxNumSamples(): number;
+  retainBuffer(): AbletonLinkAudioSinkBufferHandle | null;
+}
+
+/**
+ * LinkAudio source for receiving audio
+ */
+export declare class AbletonLinkAudioSource {
+  constructor(
+    link: AbletonLinkAudio,
+    channelId: LinkAudioId,
+    callback: (buffer: { samples: Buffer; info: AbletonLinkAudioBufferInfo }) => void
+  );
+  id(): LinkAudioId | null;
+  close(): void;
+}
+
+/**
+ * LinkAudio session state
+ */
+export declare class AbletonLinkAudioSessionState {
+  tempo(): number;
+  setTempo(bpm: number, time: number): void;
+  beatAtTime(time: number, quantum: number): number;
+  phaseAtTime(time: number, quantum: number): number;
+  timeAtBeat(beat: number, quantum: number): number;
+  requestBeatAtTime(beat: number, time: number, quantum: number): void;
+  forceBeatAtTime(beat: number, time: number, quantum: number): void;
+  setIsPlaying(isPlaying: boolean, time: number): void;
+  isPlaying(): boolean;
+  timeForIsPlaying(): number;
+  requestBeatAtStartPlayingTime(beat: number, quantum: number): void;
+  setIsPlayingAndRequestBeatAtTime(
+    isPlaying: boolean,
+    time: number,
+    beat: number,
+    quantum: number
+  ): void;
+}
+
+/**
+ * Ableton LinkAudio wrapper with audio sharing
+ */
+export declare class AbletonLinkAudio {
+  constructor(bpm: number, name: string);
+
+  enable(enabled: boolean): void;
+  isEnabled(): boolean;
+  getTempo(): number;
+  setTempo(bpm: number): void;
+  getBeat(): number;
+  getPhase(quantum: number): number;
+  getNumPeers(): number;
+  setIsPlaying(playing: boolean): void;
+  isPlaying(): boolean;
+  forceBeatAtTime(beat: number, time: number, quantum: number): void;
+  getTimeForBeat(beat: number, quantum: number): number;
+  enableStartStopSync(enabled: boolean): void;
+  isStartStopSyncEnabled(): boolean;
+  requestBeatAtTime(beat: number, time: number, quantum: number): void;
+  requestBeatAtStartPlayingTime(beat: number, quantum: number): void;
+  setIsPlayingAndRequestBeatAtTime(
+    isPlaying: boolean,
+    time: number,
+    beat: number,
+    quantum: number
+  ): void;
+  timeForIsPlaying(): number;
+
+  isLinkAudioEnabled(): boolean;
+  enableLinkAudio(enabled: boolean): void;
+  setPeerName(name: string): void;
+  setChannelsChangedCallback(callback: () => void): void;
+  channels(): LinkAudioChannel[];
+  callOnLinkThread(callback: () => void): void;
+
+  captureAppSessionState(): AbletonLinkAudioSessionState;
+  commitAppSessionState(sessionState: AbletonLinkAudioSessionState): void;
+  captureAudioSessionState(): AbletonLinkAudioSessionState;
+  commitAudioSessionState(sessionState: AbletonLinkAudioSessionState): void;
+
+  setNumPeersCallback(callback: (numPeers: number) => void): void;
+  setTempoCallback(callback: (tempo: number) => void): void;
+  setStartStopCallback(callback: (isPlaying: boolean) => void): void;
+
+  close(): void;
+}
+
+/**
  * Link state information
  */
 export interface LinkState {
