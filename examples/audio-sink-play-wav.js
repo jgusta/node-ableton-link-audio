@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const { AbletonLinkAudio, AbletonLinkAudioSink } = require('..');
 
-const WAV_PATH = path.join(__dirname, 'test.wav');
+const WAV_PATH = path.join(__dirname, 'test-125bpm.wav');
 const PEER_NAME = 'node-link-audio-sink';
-const CHANNEL_NAME = 'test-wav';
+const CHANNEL_NAME = 'nodewave';
 const BPM = 120.0;
 const QUANTUM = 4.0;
 const FRAMES_PER_BUFFER = 2048;
