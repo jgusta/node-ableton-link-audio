@@ -1,4 +1,6 @@
-# @ktamas77/abletonlink
+# @jgusta/abletonlinkaudio
+
+This is a fork of `@ktamas77/abletonlink`: https://github.com/ktamas77/ableton-link
 
 Node.js native bindings for Ableton Link - Real-time music synchronization
 
@@ -18,7 +20,7 @@ This package provides a TypeScript/Node.js wrapper around the native Ableton Lin
 ## Installation
 
 ```bash
-npm install @ktamas77/abletonlink
+npm install @jgusta/abletonlinkaudio
 ```
 
 Note: This package includes native bindings and will be compiled during installation.
@@ -26,7 +28,7 @@ Note: This package includes native bindings and will be compiled during installa
 ## Usage
 
 ```typescript
-import { AbletonLink } from '@ktamas77/abletonlink';
+import { AbletonLink } from '@jgusta/abletonlinkaudio';
 
 // Create a new Link instance with initial tempo
 const link = new AbletonLink(120.0);
@@ -66,6 +68,20 @@ link.setTempoCallback((tempo) => {
 link.setStartStopCallback((isPlaying) => {
   console.log(`Playing state: ${isPlaying}`);
 });
+```
+
+### LinkAudio (audio sharing)
+
+```typescript
+import { AbletonLinkAudio } from '@jgusta/abletonlinkaudio';
+
+const linkAudio = new AbletonLinkAudio(120.0, 'my-peer');
+linkAudio.enable(true);
+linkAudio.enableLinkAudio(true);
+
+// Channels exposed by peers
+const channels = linkAudio.channels();
+console.log(channels);
 ```
 
 ## Examples
@@ -261,12 +277,7 @@ abletonlink/
 
 ### Building from Source
 
-1. Clone the repository with submodules:
-
-```bash
-git clone --recursive https://github.com/ktamas77/ableton-link.git
-cd ableton-link
-```
+1. Clone the repository with submodules (for your fork).
 
 2. Install dependencies:
 
@@ -309,7 +320,7 @@ npm test
 npm publish --access public
 ```
 
-The package is published as `@ktamas77/abletonlink` on npm.
+The package is published as `@jgusta/abletonlinkaudio` on npm.
 
 ## Requirements
 
@@ -328,6 +339,12 @@ The package is published as `@ktamas77/abletonlink` on npm.
 ## License
 
 MIT
+
+## Acknowledgements
+
+- Original Node.js Ableton Link bindings by Tamas Kalman (`@ktamas77/abletonlink`):
+  https://github.com/ktamas77/ableton-link
+- Ableton Link and LinkAudio are © Ableton AG and distributed under GPLv2+ or proprietary license.
 
 ## Contributing
 

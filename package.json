@@ -1,5 +1,5 @@
 {
-  "name": "@ktamas77/abletonlink",
+  "name": "@jgusta/abletonlinkaudio",
   "version": "1.2.3",
   "description": "Node.js native bindings for Ableton Link - Real-time music synchronization",
   "main": "index.js",
@@ -14,10 +14,6 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "install": "node-gyp rebuild"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ktamas77/ableton-link.git"
-  },
   "keywords": [
     "ableton",
     "link",
@@ -30,12 +26,8 @@
     "native",
     "addon"
   ],
-  "author": "Tamas Kalman",
+  "author": "jgusta",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ktamas77/ableton-link/issues"
-  },
-  "homepage": "https://github.com/ktamas77/ableton-link#readme",
   "dependencies": {
     "bindings": "^1.5.0",
     "node-addon-api": "^8.0.0"
