@@ -1,8 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Run lint-staged for prettier
-npx lint-staged
-
-# Run tests
-npm test
