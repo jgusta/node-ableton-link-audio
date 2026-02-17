@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Sync with already-playing session
  *
@@ -7,7 +9,7 @@
  * that's already playing when you join.
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 console.log('=== Sync with Playing Session ===\n');
 
@@ -16,9 +18,9 @@ const link = new AbletonLink(120.0);
 
 // Strategy: Set up the callback first, then enable everything
 let syncComplete = false;
-let initialState = null;
+let initialState: boolean | null = null;
 
-link.setStartStopCallback((isPlaying) => {
+link.setStartStopCallback((isPlaying: boolean) => {
   console.log(`\nCallback: Transport is now ${isPlaying ? 'PLAYING' : 'STOPPED'}`);
   if (initialState === null) {
     initialState = isPlaying;
@@ -35,7 +37,7 @@ link.enableStartStopSync(true);
 console.log('3. Waiting for initial sync...\n');
 
 // Wait for initial sync or timeout
-const waitForSync = (callback) => {
+const waitForSync = (callback: () => void) => {
   const startTime = Date.now();
   const checkInterval = setInterval(() => {
     const elapsed = Date.now() - startTime;

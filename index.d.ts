@@ -148,7 +148,18 @@ export declare class AbletonLink {
    * @returns Time in seconds when transport state will change
    */
   timeForIsPlaying(): number;
-  getClockTime(): number;
+
+  onTempoChange(callback: (tempo: number) => void): () => void;
+  onPeersChange(callback: (numPeers: number) => void): () => void;
+  onStartStop(callback: (isPlaying: boolean) => void): () => void;
+  onStart(callback: (isPlaying: true) => void): () => void;
+  onStop(callback: (isPlaying: false) => void): () => void;
+  waitForSync(options?: {
+    timeoutMs?: number;
+    pollMs?: number;
+    requirePeers?: boolean;
+    requireStartStopSync?: boolean;
+  }): Promise<{ enabled: boolean; peers: number; startStopOk: boolean }>;
 }
 
 /**
@@ -237,7 +248,6 @@ export declare class AbletonLinkAudioSessionState {
   setIsPlaying(isPlaying: boolean, time: number): void;
   isPlaying(): boolean;
   timeForIsPlaying(): number;
-  getClockTime(): number;
   requestBeatAtStartPlayingTime(beat: number, quantum: number): void;
   setIsPlayingAndRequestBeatAtTime(
     isPlaying: boolean,
@@ -275,6 +285,7 @@ export declare class AbletonLinkAudio {
     quantum: number
   ): void;
   timeForIsPlaying(): number;
+  getClockTime(): number;
 
   isLinkAudioEnabled(): boolean;
   enableLinkAudio(enabled: boolean): void;
@@ -293,7 +304,101 @@ export declare class AbletonLinkAudio {
   setStartStopCallback(callback: (isPlaying: boolean) => void): void;
 
   close(): void;
+
+  onTempoChange(callback: (tempo: number) => void): () => void;
+  onPeersChange(callback: (numPeers: number) => void): () => void;
+  onStartStop(callback: (isPlaying: boolean) => void): () => void;
+  onStart(callback: (isPlaying: true) => void): () => void;
+  onStop(callback: (isPlaying: false) => void): () => void;
+  waitForSync(options?: {
+    timeoutMs?: number;
+    pollMs?: number;
+    requirePeers?: boolean;
+    requireStartStopSync?: boolean;
+  }): Promise<{ enabled: boolean; peers: number; startStopOk: boolean }>;
 }
+
+export interface WavFileData {
+  samples: Int16Array;
+  numChannels: number;
+  sampleRate: number;
+}
+
+export interface WavSinkPlayer {
+  sink: AbletonLinkAudioSink;
+  wav: WavFileData;
+  scheduler: LinkTimeScheduler;
+  start(): void;
+  stop(): void;
+}
+
+export interface WavPlayerOptions {
+  quantum?: number;
+  framesPerBuffer?: number;
+  schedulerCoarseMs?: number;
+  maxBuffersPerTick?: number;
+  targetLeadSec?: number;
+  lowWaterSec?: number;
+  refillCheckPeriodSec?: number;
+  channelName?: string;
+}
+
+export interface LinkTimeScheduler {
+  now(): number;
+  scheduleAt(
+    timeSec: number,
+    fn: (timeSec: number) => void
+  ): { cancel(): void };
+  scheduleIn(
+    delaySec: number,
+    fn: (timeSec: number) => void
+  ): { cancel(): void };
+  scheduleEvery(
+    periodSec: number,
+    fn: (timeSec: number) => void,
+    options?: { startAt?: number | null }
+  ): { cancel(): void };
+  start(): void;
+  stop(): void;
+}
+
+export declare const linkAudioUtils: {
+  parseWav(buffer: Buffer): WavFileData;
+  readWavFile(filePath: string): Promise<WavFileData>;
+  readWavFileSync(filePath: string): WavFileData;
+  sleep(ms: number, signal?: AbortSignal): Promise<void>;
+  sleepUntilLinkTime(
+    link: AbletonLinkAudio,
+    targetTimeSec: number,
+    signal?: AbortSignal,
+    options?: { coarseMs?: number }
+  ): Promise<void>;
+  callOnLinkThreadAsync(link: AbletonLinkAudio): Promise<void>;
+  waitForChannel(
+    link: AbletonLinkAudio,
+    predicate: (channel: LinkAudioChannel) => boolean,
+    options?: { timeoutMs?: number; pollMs?: number }
+  ): Promise<LinkAudioChannel>;
+  createSourceIterator(
+    link: AbletonLinkAudio,
+    channelId: LinkAudioId
+  ): AsyncIterable<{ samples: Buffer; info: AbletonLinkAudioBufferInfo }>;
+  LinkTimeScheduler: { new (
+    link: AbletonLinkAudio,
+    options?: { coarseMs?: number }
+  ): LinkTimeScheduler };
+  DEFAULT_WAV_OPTIONS: Required<WavPlayerOptions>;
+  createWavSinkPlayer(
+    link: AbletonLinkAudio,
+    wavPath: string,
+    options?: WavPlayerOptions
+  ): WavSinkPlayer;
+  playWav(
+    link: AbletonLinkAudio,
+    wavPath: string,
+    options?: WavPlayerOptions
+  ): Promise<WavSinkPlayer>;
+};
 
 /**
  * Link state information

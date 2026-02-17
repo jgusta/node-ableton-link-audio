@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Monitor isPlaying state
  *
@@ -9,7 +11,7 @@
  * IMPORTANT: Start/stop sync must be enabled for isPlaying to work!
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 // Create Link instance with 120 BPM
 const link = new AbletonLink(120.0);
@@ -28,8 +30,8 @@ console.log(`  Initial tempo: ${link.getTempo()} BPM`);
 console.log('');
 
 // Set up start/stop callback to get notified of state changes
-let lastCallbackState = null;
-link.setStartStopCallback((isPlaying) => {
+let lastCallbackState: boolean | null = null;
+link.setStartStopCallback((isPlaying: boolean) => {
   const timestamp = new Date().toLocaleTimeString();
   console.log(`\n[${timestamp}] Start/Stop Callback Triggered:`);
   console.log(`  State changed to: ${isPlaying ? '▶️  PLAYING' : '⏸️  STOPPED'}`);
@@ -37,7 +39,7 @@ link.setStartStopCallback((isPlaying) => {
 });
 
 // Monitor state periodically
-let previousState = null;
+let previousState: boolean | null = null;
 let stateChangeCount = 0;
 
 const monitor = setInterval(() => {
@@ -49,7 +51,7 @@ const monitor = setInterval(() => {
 
   // Check if state changed
   if (previousState !== null && previousState !== playing) {
-    stateChangeCount++;
+    stateChangeCount += 1;
     console.log(`\n🔄 State Change Detected! (Change #${stateChangeCount})`);
   }
   previousState = playing;
@@ -88,11 +90,11 @@ process.on('SIGINT', () => {
 
 // Also test the setIsPlaying method after 5 seconds
 setTimeout(() => {
-  console.log('\n\n📝 Testing setIsPlaying(true) from Node.js side...');
+  console.log('\n\n📝 Testing setIsPlaying(true) from Node.ts side...');
   link.setIsPlaying(true);
 
   setTimeout(() => {
-    console.log('\n📝 Testing setIsPlaying(false) from Node.js side...');
+    console.log('\n📝 Testing setIsPlaying(false) from Node.ts side...');
     link.setIsPlaying(false);
   }, 3000);
 }, 5000);

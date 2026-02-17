@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Workaround for initial sync issue
  *
@@ -7,7 +9,7 @@
  * when joining a session that's already playing.
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 console.log('=== Force Sync Workaround ===\n');
 
@@ -16,8 +18,8 @@ const link = new AbletonLink(120.0);
 
 // Track sync events
 let syncCount = 0;
-link.setStartStopCallback((isPlaying) => {
-  syncCount++;
+link.setStartStopCallback((isPlaying: boolean) => {
+  syncCount += 1;
   console.log(`Sync #${syncCount}: ${isPlaying ? 'PLAYING' : 'STOPPED'}`);
 });
 

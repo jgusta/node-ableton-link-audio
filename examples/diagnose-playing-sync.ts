@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Diagnose isPlaying sync behavior
  *
@@ -7,7 +9,7 @@
  * connecting to a session that's already playing.
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 console.log('=== Ableton Link Playing State Sync Test ===\n');
 
@@ -15,12 +17,12 @@ console.log('=== Ableton Link Playing State Sync Test ===\n');
 const link = new AbletonLink(120.0);
 
 // Track all state changes
-const stateHistory = [];
+const stateHistory: { time: number; callback: boolean; state: boolean; peers: number; callbackNum: number }[] = [];
 let callbackCount = 0;
 
 // Set up callback BEFORE enabling anything
-link.setStartStopCallback((isPlaying) => {
-  callbackCount++;
+link.setStartStopCallback((isPlaying: boolean) => {
+  callbackCount += 1;
   const timestamp = Date.now();
   const event = {
     time: timestamp,
@@ -30,7 +32,9 @@ link.setStartStopCallback((isPlaying) => {
     callbackNum: callbackCount,
   };
   stateHistory.push(event);
-  console.log(`\n🔔 Callback #${callbackCount}: isPlaying = ${isPlaying} (peers: ${event.peers})`);
+  console.log(
+    `\n🔔 Callback #${callbackCount}: isPlaying = ${isPlaying} (peers: ${event.peers})`
+  );
 });
 
 console.log('1. Initial state (before enabling):');
@@ -96,7 +100,8 @@ setTimeout(() => {
       if (stateHistory.length > 0) {
         console.log('Callback sequence:');
         stateHistory.forEach((event, index) => {
-          const relTime = index > 0 ? `+${event.time - stateHistory[0].time}ms` : '0ms';
+          const relTime =
+            index > 0 ? `+${event.time - stateHistory[0].time}ms` : '0ms';
           console.log(
             `  ${index + 1}. ${event.state ? 'PLAYING' : 'STOPPED'} at ${relTime} (peers: ${event.peers})`
           );

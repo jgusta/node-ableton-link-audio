@@ -1,4 +1,5 @@
-const { AbletonLink } = require('../index');
+/* eslint-disable no-console */
+import { AbletonLink } from '../index.ts';
 
 // Create a new Link instance with 120 BPM
 const link = new AbletonLink(120.0);
@@ -82,7 +83,9 @@ setInterval(() => {
 
     // Only show positive beats for clarity
     if (lastBeat >= 0) {
-      console.log(`Bar ${bar}, Beat ${barBeat} | Phase: ${phase.toFixed(2)} | Playing: ${playing}`);
+      console.log(
+        `Bar ${bar}, Beat ${barBeat} | Phase: ${phase.toFixed(2)} | Playing: ${playing}`
+      );
     }
   }
 }, 100);

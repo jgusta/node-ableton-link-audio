@@ -1,16 +1,17 @@
-const { AbletonLink } = require('../index');
+/* eslint-disable no-console */
+import { AbletonLink } from '../index.ts';
 
 // Create Link with a reasonable default tempo (120 BPM)
 // This will be automatically replaced when joining an existing session
 const link = new AbletonLink(120.0);
 
 // Set up callback to be notified when tempo changes
-link.setTempoCallback((tempo) => {
+link.setTempoCallback((tempo: number) => {
   console.log(`✨ Tempo updated to: ${tempo.toFixed(1)} BPM`);
 });
 
 // Set up callback for peer connections
-link.setNumPeersCallback((numPeers) => {
+link.setNumPeersCallback((numPeers: number) => {
   console.log(`🔗 Peers changed: ${numPeers} connected`);
   if (numPeers > 0) {
     console.log('📡 Syncing with existing session...');
@@ -27,8 +28,10 @@ setInterval(() => {
   const tempo = link.getTempo();
   const peers = link.getNumPeers();
   const beat = Math.floor(link.getBeat());
-  
-  process.stdout.write(`\rTempo: ${tempo.toFixed(1)} BPM | Beat: ${beat} | Peers: ${peers}  `);
+
+  process.stdout.write(
+    `\rTempo: ${tempo.toFixed(1)} BPM | Beat: ${beat} | Peers: ${peers}  `
+  );
 }, 100);
 
 // Handle exit

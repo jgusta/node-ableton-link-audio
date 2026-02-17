@@ -1,31 +1,38 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Test initial synchronization behavior
  *
  * This test explores different timing scenarios for enableStartStopSync
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 console.log('=== Testing Initial Sync Behavior ===\n');
 
-async function sleep(ms) {
+async function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function testScenario(name, setupFn) {
+async function testScenario(
+  name: string,
+  setupFn: (link: any) => Promise<void> | void
+) {
   console.log(`\n--- ${name} ---`);
   const link = new AbletonLink(120.0);
 
-  let callbackHistory = [];
-  link.setStartStopCallback((isPlaying) => {
+  const callbackHistory: { time: number; state: boolean; peers: number }[] = [];
+  link.setStartStopCallback((isPlaying: boolean) => {
     callbackHistory.push({
       time: Date.now(),
       state: isPlaying,
       peers: link.getNumPeers(),
     });
-    console.log(`  Callback: ${isPlaying ? 'PLAYING' : 'STOPPED'} (peers: ${link.getNumPeers()})`);
+    console.log(
+      `  Callback: ${isPlaying ? 'PLAYING' : 'STOPPED'} (peers: ${link.getNumPeers()})`
+    );
   });
 
   await setupFn(link);
@@ -90,4 +97,4 @@ async function runTests() {
   console.log('\n=== Tests Complete ===\n');
 }
 
-runTests().catch(console.error);
+runTests().catch((err) => console.error(err));

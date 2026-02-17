@@ -1,19 +1,27 @@
-const {
+import {
   AbletonLinkAudio,
   AbletonLinkAudioSink,
   AbletonLinkAudioSource,
-} = require('../index');
+} from '../index.ts';
 
 describe('AbletonLinkAudio', () => {
-  let link;
+  let link: any;
 
-  beforeEach(() => {
+  beforeAll(() => {
     link = new AbletonLinkAudio(120.0, 'test-peer');
   });
 
-  afterEach(() => {
+  afterAll(() => {
     if (link && typeof link.close === 'function') {
       link.close();
+    }
+  });
+
+  beforeEach(() => {
+    if (link) {
+      link.enable(false);
+      link.enableLinkAudio(false);
+      link.setTempo(120.0);
     }
   });
 
@@ -73,4 +81,6 @@ describe('AbletonLinkAudio', () => {
     expect(source).toBeDefined();
     source.close();
   });
+
+  // linkAudioUtils tests live in test/linkaudio-utils.test.ts
 });

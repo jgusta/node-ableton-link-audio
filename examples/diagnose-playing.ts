@@ -1,23 +1,25 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Diagnose isPlaying functionality
  *
  * This example helps diagnose why isPlaying might not be working correctly.
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 console.log('=== Ableton Link isPlaying Diagnostics ===\n');
 
 // Test 1: Create Link instance
 console.log('1. Creating Link instance...');
-let link;
+let link: any;
 try {
   link = new AbletonLink(120.0);
   console.log('   ✅ Link instance created successfully');
 } catch (e) {
-  console.log('   ❌ Failed to create Link instance:', e.message);
+  console.log('   ❌ Failed to create Link instance:', (e as Error).message);
   process.exit(1);
 }
 
@@ -50,7 +52,7 @@ if (link.getNumPeers() === 0) {
 // Test 6: Test callback
 console.log('\n6. Setting up start/stop callback...');
 let callbackFired = false;
-link.setStartStopCallback((isPlaying) => {
+link.setStartStopCallback((isPlaying: boolean) => {
   callbackFired = true;
   console.log(`   🔔 Callback fired: isPlaying = ${isPlaying}`);
 });

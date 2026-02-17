@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Best practices for joining a Link session that may already be playing
  *
@@ -8,7 +10,7 @@
  * is already active.
  */
 
-const { AbletonLink } = require('../');
+import { AbletonLink } from '../index.ts';
 
 console.log('=== Best Practices: Joining a Playing Session ===\n');
 
@@ -21,15 +23,15 @@ const link = new AbletonLink(INITIAL_TEMPO);
 
 // Track synchronization state
 let isInitialized = false;
-let lastKnownState = null;
-let syncStartTime = Date.now();
+let lastKnownState: boolean | null = null;
+const syncStartTime = Date.now();
 
 console.log('Setting up Link with proper initialization sequence...\n');
 
 // Step 1: Set up all callbacks BEFORE enabling anything
 console.log('1. Setting up callbacks...');
 
-link.setStartStopCallback((isPlaying) => {
+link.setStartStopCallback((isPlaying: boolean) => {
   const timestamp = new Date().toLocaleTimeString();
   console.log(
     `\n[${timestamp}] Transport state changed: ${isPlaying ? '▶️  PLAYING' : '⏸️  STOPPED'}`
@@ -44,11 +46,13 @@ link.setStartStopCallback((isPlaying) => {
   lastKnownState = isPlaying;
 });
 
-link.setNumPeersCallback((numPeers) => {
-  console.log(`\n🔗 Peers changed: ${numPeers} ${numPeers === 1 ? 'peer' : 'peers'} connected`);
+link.setNumPeersCallback((numPeers: number) => {
+  console.log(
+    `\n🔗 Peers changed: ${numPeers} ${numPeers === 1 ? 'peer' : 'peers'} connected`
+  );
 });
 
-link.setTempoCallback((tempo) => {
+link.setTempoCallback((tempo: number) => {
   console.log(`\n🎵 Tempo changed: ${tempo.toFixed(1)} BPM`);
 });
 
