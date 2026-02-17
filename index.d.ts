@@ -341,6 +341,16 @@ export interface WavPlayerOptions {
   lowWaterSec?: number;
   refillCheckPeriodSec?: number;
   channelName?: string;
+  syncMode?: 'free' | 'quantized' | 'resample';
+  referenceTempo?: number;
+  tempo?: number;
+  loopLengthBeats?: number | null;
+  loopQuantize?: number;
+  adaptiveLead?: boolean;
+  adaptiveLeadMinSec?: number;
+  adaptiveLeadMaxSec?: number;
+  adaptiveLeadStepSec?: number;
+  adaptiveFailWindowMs?: number;
 }
 
 export interface LinkTimeScheduler {

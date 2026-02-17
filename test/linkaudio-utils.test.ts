@@ -29,6 +29,7 @@ describe('linkAudioUtils', () => {
       framesPerBuffer: 256,
       targetLeadSec: 0.01,
       lowWaterSec: 0.005,
+      syncMode: 'free',
     });
     expect(player).toBeDefined();
     expect(player.sink).toBeDefined();
@@ -54,6 +55,37 @@ describe('linkAudioUtils', () => {
     });
     scheduler.stop();
     expect(typeof fired).toBe('boolean');
+  });
+
+  test('createWavSinkPlayer supports resample mode', () => {
+    link.enable(true);
+    link.enableLinkAudio(true);
+    const wavPath = path.join(process.cwd(), 'examples', 'test-125bpm.wav');
+    const player = linkAudioUtils.createWavSinkPlayer(link, wavPath, {
+      channelName: 'test-wav-resample',
+      framesPerBuffer: 256,
+      syncMode: 'resample',
+      referenceTempo: 125,
+      tempo: 125,
+      adaptiveLead: true,
+    });
+    player.start();
+    player.stop();
+  });
+
+  test('createWavSinkPlayer supports quantized mode', () => {
+    link.enable(true);
+    link.enableLinkAudio(true);
+    const wavPath = path.join(process.cwd(), 'examples', 'test-125bpm.wav');
+    const player = linkAudioUtils.createWavSinkPlayer(link, wavPath, {
+      channelName: 'test-wav-quantized',
+      framesPerBuffer: 256,
+      syncMode: 'quantized',
+      loopLengthBeats: 4,
+      loopQuantize: 4,
+    });
+    player.start();
+    player.stop();
   });
 
   test('readWavFileSync returns wav metadata', () => {

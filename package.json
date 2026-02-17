@@ -7,11 +7,13 @@
   "type": "module",
   "scripts": {
     "configure": "node-gyp configure",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && node scripts/copy-assets.js",
+    "reset":"pnpm run clean && pnpm run build && pnpm run configure && pnpm run build:native",
     "build:native": "node-gyp build",
     "rebuild": "node-gyp rebuild",
     "clean": "node-gyp clean",
     "test": "tsc -p tsconfig.json && node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand dist/test/linkaudio.test.js dist/test/linkaudio-utils.test.js && node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand dist/test/link.test.js dist/test/linkcallbacks.test.js dist/test/abletonlink.test.js",
+    "example": "node scripts/run-example.js",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "install": "node-gyp rebuild"

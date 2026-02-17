@@ -97,6 +97,7 @@ const player = linkAudioUtils.createWavSinkPlayer(linkAudio, './loop.wav', {
   quantum: 4,
   targetLeadSec: 0.02,
   lowWaterSec: 0.01,
+  syncMode: 'free', // 'free' | 'quantized' | 'resample'
 });
 
 player.start();
@@ -109,6 +110,9 @@ Key options:
 - `lowWaterSec`: refill trigger threshold
 - `refillCheckPeriodSec`: how often the refill check runs (Link time)
 - `schedulerCoarseMs`: coarse sleep margin for the scheduler
+- `syncMode`: `free` (default), `quantized` (snap loop restarts), or `resample` (tempo-following, pitch changes)
+- `referenceTempo`: BPM used as the baseline for resampling
+- `adaptiveLead`: enable auto-tuning of lead time based on underrun recovery
 
 ## Examples
 

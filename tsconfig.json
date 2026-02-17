@@ -8,6 +8,7 @@
     "outDir": "./dist",
     "rootDir": "./",
     "strict": true,
+    "noEmit": true,
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "skipLibCheck": true,

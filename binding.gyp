@@ -3,8 +3,8 @@
     {
       "target_name": "abletonlink",
       "sources": [
-        "src/abletonlink.cc",
-        "src/abletonlink_audio.cc",
+        "src/wrapper/abletonlink.cc",
+        "src/wrapper/abletonlink_audio.cc",
         "link/extensions/abl_link/src/abl_link.cpp"
       ],
       "include_dirs": [

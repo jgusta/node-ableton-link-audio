@@ -1,19 +1,19 @@
-import { parseWav, readWavFile, readWavFileSync, WavFileData } from './wav.ts';
-import { sleep, sleepUntilLinkTime, LinkTimeScheduler } from './scheduler.ts';
-import { waitForChannel } from './channel.ts';
-import { createSourceIterator } from './source.ts';
+import { parseWav, readWavFile, readWavFileSync, type WavFileData } from './wav.ts'
+import { sleep, sleepUntilLinkTime, LinkTimeScheduler } from './scheduler.ts'
+import { waitForChannel } from './channel.ts'
+import { createSourceIterator } from './source.ts'
 import {
   DEFAULT_WAV_OPTIONS,
   createWavSinkPlayer,
   playWav,
-  WavPlayerOptions,
-  WavSinkPlayer,
-} from './player.ts';
+  type WavPlayerOptions,
+  type WavSinkPlayer,
+} from './player.ts'
 
 function callOnLinkThreadAsync(link: { callOnLinkThread: (cb: () => void) => void }) {
   return new Promise<void>((resolve) => {
-    link.callOnLinkThread(() => resolve());
-  });
+    link.callOnLinkThread(() => resolve())
+  })
 }
 
 export {
@@ -29,7 +29,7 @@ export {
   createWavSinkPlayer,
   playWav,
   callOnLinkThreadAsync,
-  WavFileData,
-  WavPlayerOptions,
-  WavSinkPlayer,
-};
+  type WavFileData,
+  type WavPlayerOptions,
+  type WavSinkPlayer,
+}

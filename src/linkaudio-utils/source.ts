@@ -1,7 +1,8 @@
-import { createRequire } from 'module';
+// import { createRequire } from 'module';
 
-const require = createRequire(import.meta.url);
-const bindings = require('bindings') as (name: string) => any;
+// const require = createRequire(import.meta.url);
+// const bindings = require('bindings') as (name: string) => any;
+import bindings from 'bindings'
 const addon = bindings('abletonlink') as any;
 
 export interface SourceIteratorPayload {
